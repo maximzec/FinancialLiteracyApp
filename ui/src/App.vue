@@ -46,6 +46,20 @@ export default {
         this.telegramUser = this.$telegram.getUserData();
         console.log('Данные пользователя Telegram:', this.telegramUser);
       }
+    },
+    
+    // Метод для настройки полноэкранного режима
+    setupFullScreenMode() {
+      if (this.isTelegramApp) {
+        // Запрашиваем полноэкранный режим
+        this.$telegram.requestFullScreen();
+        
+        // Скрываем элементы управления Telegram
+        this.$telegram.hideBackButton();
+        
+        // Добавляем обработчик для повторного запроса полноэкранного режима
+        window.addEventListener('resize', this.handleResize);
+      }
     }
   },
   computed: {
@@ -55,6 +69,13 @@ export default {
     }
   },
   created() {
+    // Создаем метод для обработки изменения размера окна
+    this.handleResize = () => {
+      if (this.isTelegramApp && !this.$telegram.isFullScreen()) {
+        this.$telegram.requestFullScreen();
+      }
+    };
+    
     // Проверяем, был ли уже пройден онбординг
     const onboardingCompleted = localStorage.getItem('onboardingCompleted');
     if (onboardingCompleted === 'true') {
@@ -66,17 +87,18 @@ export default {
       // Получаем данные пользователя
       this.getTelegramUserData();
       
-      // Запрашиваем полноэкранный режим
-      this.$telegram.requestFullScreen();
-      
-      // Скрываем элементы управления Telegram
-      this.$telegram.hideBackButton();
+      // Настраиваем полноэкранный режим
+      this.setupFullScreenMode();
       
       // Если онбординг уже пройден, показываем главную кнопку
       if (!this.showOnboarding) {
         this.setupTelegramMainButton();
       }
     }
+  },
+  beforeUnmount() {
+    // Удаляем обработчик события resize
+    window.removeEventListener('resize', this.handleResize);
   }
 };
 </script>

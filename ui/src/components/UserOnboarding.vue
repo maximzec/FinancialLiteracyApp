@@ -92,7 +92,8 @@ export default {
       this.$emit('onboarding-completed');
     },
     forceBlackBackground() {
-      document.body.classList.add('onboarding-active');
+      // Добавляем классы для полноэкранного режима
+      document.body.classList.add('onboarding-active', 'fullscreen-active');
       
       // Создаем глобальные стили
       const styleElement = document.createElement('style');
@@ -104,9 +105,23 @@ export default {
           position: fixed !important;
           width: 100% !important;
           height: 100% !important;
+          touch-action: none !important;
         }
         
         html {
+          background-color: #000000 !important;
+          overflow: hidden !important;
+        }
+        
+        .onboarding-fullscreen {
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          bottom: 0 !important;
+          width: 100vw !important;
+          height: 100vh !important;
+          z-index: 9999 !important;
           background-color: #000000 !important;
         }
       `;
@@ -122,10 +137,15 @@ export default {
       this.styleInterval = setInterval(() => {
         document.body.style.backgroundColor = '#000000';
         document.documentElement.style.backgroundColor = '#000000';
+        
+        // Проверяем, находится ли приложение в полноэкранном режиме
+        if (this.isTelegramApp && !this.$telegram.isFullScreen()) {
+          this.$telegram.requestFullScreen();
+        }
       }, 100);
     },
     removeBlackBackground() {
-      document.body.classList.remove('onboarding-active');
+      document.body.classList.remove('onboarding-active', 'fullscreen-active');
       
       // Удаляем глобальные стили
       const styleElement = document.getElementById('onboarding-global-styles');
@@ -168,12 +188,30 @@ export default {
       // Скрываем элементы управления Telegram
       this.$telegram.hideBackButton();
       
+      // Добавляем обработчик для повторного запроса полноэкранного режима
+      window.addEventListener('resize', () => {
+        if (!this.$telegram.isFullScreen()) {
+          this.$telegram.requestFullScreen();
+        }
+      });
+      
       // Показываем кнопку "Далее" в Telegram
       this.setupTelegramMainButton();
     }
   },
   beforeUnmount() {
     this.removeBlackBackground();
+    
+    // Удаляем обработчик события resize
+    window.removeEventListener('resize', this.handleResize);
+  },
+  created() {
+    // Создаем метод для обработки изменения размера окна
+    this.handleResize = () => {
+      if (this.isTelegramApp && !this.$telegram.isFullScreen()) {
+        this.$telegram.requestFullScreen();
+      }
+    };
   }
 };
 </script>

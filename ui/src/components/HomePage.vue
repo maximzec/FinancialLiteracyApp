@@ -165,6 +165,18 @@ export default {
       // Здесь будет логика для начала теста
     }
   },
+  beforeUnmount() {
+    // Удаляем обработчик события resize
+    window.removeEventListener('resize', this.handleResize);
+  },
+  created() {
+    // Создаем метод для обработки изменения размера окна
+    this.handleResize = () => {
+      if (this.isTelegramApp && !this.$telegram.isFullScreen()) {
+        this.$telegram.requestFullScreen();
+      }
+    };
+  },
   mounted() {
     // Если приложение запущено в Telegram, настраиваем интерфейс
     if (this.isTelegramApp) {
@@ -173,6 +185,12 @@ export default {
       
       // Скрываем элементы управления Telegram
       this.$telegram.hideBackButton();
+      
+      // Добавляем обработчик для повторного запроса полноэкранного режима
+      window.addEventListener('resize', this.handleResize);
+      
+      // Добавляем класс для полноэкранного режима
+      document.body.classList.add('fullscreen-active');
     }
   }
 };

@@ -83,9 +83,19 @@ class TelegramService {
                 this.applyTelegramTheme();
             });
 
-            // Обработчик закрытия приложения
-            this.webApp.onEvent('viewportChanged', () => {
-                console.log('Viewport changed');
+            // Обработчик изменения полноэкранного режима
+            this.webApp.onEvent('fullscreenChanged', (isFullscreen) => {
+                console.log('Fullscreen mode changed:', isFullscreen);
+            });
+
+            // Обработчик ошибки полноэкранного режима
+            this.webApp.onEvent('fullscreenFailed', () => {
+                console.error('Failed to enter fullscreen mode');
+            });
+
+            // Обработчик изменения безопасной области
+            this.webApp.onEvent('safeAreaChanged', () => {
+                console.log('Safe area changed');
             });
         } catch (error) {
             console.error('Failed to setup event handlers:', error);
@@ -177,23 +187,54 @@ class TelegramService {
         }
     }
 
-    // Метод для запроса полноэкранного режима
+    // Метод для запроса полноэкранного режима (новый метод из Bot API 8.0)
     requestFullScreen() {
         if (!this.isInitialized) return;
 
         try {
-            // Расширяем приложение на весь экран
-            this.webApp.expand();
-
-            // Устанавливаем параметры отображения
-            this.webApp.setViewportSettings({
-                is_expanded: true,
-                is_fullscreen: true
-            });
-
-            console.log('Requested full screen mode');
+            // Используем новый метод requestFullscreen из Bot API 8.0
+            if (typeof this.webApp.requestFullscreen === 'function') {
+                this.webApp.requestFullscreen();
+                console.log('Requested full screen mode using new API');
+            } else {
+                // Для обратной совместимости используем старый метод
+                this.webApp.expand();
+                console.log('Requested expanded mode (fallback)');
+            }
         } catch (error) {
             console.error('Failed to request full screen:', error);
+        }
+    }
+
+    // Метод для выхода из полноэкранного режима (новый метод из Bot API 8.0)
+    exitFullScreen() {
+        if (!this.isInitialized) return;
+
+        try {
+            // Используем новый метод exitFullscreen из Bot API 8.0
+            if (typeof this.webApp.exitFullscreen === 'function') {
+                this.webApp.exitFullscreen();
+                console.log('Exited full screen mode');
+            }
+        } catch (error) {
+            console.error('Failed to exit full screen:', error);
+        }
+    }
+
+    // Метод для проверки, находится ли приложение в полноэкранном режиме
+    isFullScreen() {
+        if (!this.isInitialized) return false;
+
+        try {
+            // Используем новое свойство isFullscreen из Bot API 8.0
+            if (typeof this.webApp.isFullscreen !== 'undefined') {
+                return this.webApp.isFullscreen;
+            }
+            // Для обратной совместимости
+            return this.webApp.isExpanded;
+        } catch (error) {
+            console.error('Failed to check full screen status:', error);
+            return false;
         }
     }
 
@@ -232,18 +273,6 @@ class TelegramService {
             console.log('Back button shown');
         } catch (error) {
             console.error('Failed to show back button:', error);
-        }
-    }
-
-    // Метод для проверки, находится ли приложение в полноэкранном режиме
-    isFullScreen() {
-        if (!this.isInitialized) return false;
-
-        try {
-            return this.webApp.isExpanded;
-        } catch (error) {
-            console.error('Failed to check full screen status:', error);
-            return false;
         }
     }
 }

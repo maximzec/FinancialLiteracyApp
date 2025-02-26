@@ -17,6 +17,18 @@ const isTelegramApp = telegramService.isRunningInTelegram()
 // Добавляем класс для стилизации, если приложение запущено в Telegram
 if (isTelegramApp) {
     document.body.classList.add('telegram-app')
+
+    // Запрашиваем полноэкранный режим при запуске
+    telegramService.requestFullScreen()
+
+    // Добавляем обработчик для изменения размера окна
+    window.addEventListener('resize', () => {
+        // Повторно запрашиваем полноэкранный режим при изменении размера окна
+        telegramService.requestFullScreen()
+    })
+
+    // Добавляем класс для полноэкранного режима
+    document.body.classList.add('fullscreen-active')
 }
 
 // Монтируем приложение
