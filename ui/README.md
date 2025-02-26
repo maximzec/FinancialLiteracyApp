@@ -1,24 +1,80 @@
-# ui
+# FinLit - Приложение для финансовой грамотности
 
-## Project setup
-```
+Веб-приложение для обучения финансовой грамотности с поддержкой Telegram Mini Apps.
+
+## Особенности
+
+- Онбординг для новых пользователей
+- Адаптивный дизайн для мобильных устройств
+- Интеграция с Telegram Mini Apps
+- Поддержка светлой и темной темы
+- Карточки с рекомендуемыми действиями
+- Отслеживание прогресса обучения
+
+## Установка и запуск
+
+### Предварительные требования
+
+- Node.js (версия 14 или выше)
+- npm или yarn
+
+### Установка зависимостей
+
+```bash
+# Установка зависимостей
 npm install
+# или
+yarn install
 ```
 
-### Compiles and hot-reloads for development
-```
+### Запуск для разработки
+
+```bash
+# Запуск сервера разработки
 npm run serve
+# или
+yarn serve
 ```
 
-### Compiles and minifies for production
-```
+### Сборка для продакшена
+
+```bash
+# Сборка для продакшена
 npm run build
+# или
+yarn build
 ```
 
-### Lints and fixes files
+## Интеграция с Telegram Mini Apps
+
+### Настройка бота
+
+1. Создайте бота через [@BotFather](https://t.me/BotFather)
+2. Получите токен бота
+3. Настройте веб-приложение через команду /mybots > выберите бота > Bot Settings > Menu Button > Configure Menu Button
+4. Укажите URL вашего приложения
+
+### Тестирование
+
+Для тестирования Telegram Mini Apps можно использовать:
+
+1. [Telegram Web App Validator](https://core.telegram.org/bots/webapps#testing-mini-apps)
+2. Отладку через мобильное приложение Telegram
+
+## Структура проекта
+
 ```
-npm run lint
+ui/
+├── public/              # Статические файлы
+├── src/                 # Исходный код
+│   ├── assets/          # Ресурсы (изображения, стили)
+│   ├── components/      # Vue компоненты
+│   ├── services/        # Сервисы (Telegram API и др.)
+│   ├── App.vue          # Корневой компонент
+│   └── main.js          # Точка входа
+└── vue.config.js        # Конфигурация Vue
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Лицензия
+
+MIT

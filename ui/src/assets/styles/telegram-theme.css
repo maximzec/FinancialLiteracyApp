@@ -1,0 +1,129 @@
+/* Стили для адаптации приложения под темы Telegram */
+
+/* Светлая тема */
+:root[data-theme="light"] {
+    --tg-theme-bg-color: var(--tg-theme-bg-color, #ffffff);
+    --tg-theme-text-color: var(--tg-theme-text-color, #222222);
+    --tg-theme-hint-color: var(--tg-theme-hint-color, #999999);
+    --tg-theme-link-color: var(--tg-theme-link-color, #2678b6);
+    --tg-theme-button-color: var(--tg-theme-button-color, #3390ec);
+    --tg-theme-button-text-color: var(--tg-theme-button-text-color, #ffffff);
+    --tg-theme-secondary-bg-color: var(--tg-theme-secondary-bg-color, #f0f0f0);
+
+    /* Дополнительные переменные для нашего приложения */
+    --app-background-color: var(--tg-theme-bg-color);
+    --app-text-color: var(--tg-theme-text-color);
+    --app-hint-color: var(--tg-theme-hint-color);
+    --app-link-color: var(--tg-theme-link-color);
+    --app-button-color: var(--tg-theme-button-color);
+    --app-button-text-color: var(--tg-theme-button-text-color);
+    --app-card-background: var(--tg-theme-secondary-bg-color);
+    --app-header-background: var(--tg-theme-secondary-bg-color);
+    --app-border-color: rgba(0, 0, 0, 0.1);
+    --app-shadow-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Темная тема */
+:root[data-theme="dark"] {
+    --tg-theme-bg-color: var(--tg-theme-bg-color, #212121);
+    --tg-theme-text-color: var(--tg-theme-text-color, #ffffff);
+    --tg-theme-hint-color: var(--tg-theme-hint-color, #aaaaaa);
+    --tg-theme-link-color: var(--tg-theme-link-color, #8cc2ff);
+    --tg-theme-button-color: var(--tg-theme-button-color, #3390ec);
+    --tg-theme-button-text-color: var(--tg-theme-button-text-color, #ffffff);
+    --tg-theme-secondary-bg-color: var(--tg-theme-secondary-bg-color, #2c2c2c);
+
+    /* Дополнительные переменные для нашего приложения */
+    --app-background-color: var(--tg-theme-bg-color);
+    --app-text-color: var(--tg-theme-text-color);
+    --app-hint-color: var(--tg-theme-hint-color);
+    --app-link-color: var(--tg-theme-link-color);
+    --app-button-color: var(--tg-theme-button-color);
+    --app-button-text-color: var(--tg-theme-button-text-color);
+    --app-card-background: var(--tg-theme-secondary-bg-color);
+    --app-header-background: var(--tg-theme-secondary-bg-color);
+    --app-border-color: rgba(255, 255, 255, 0.1);
+    --app-shadow-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Адаптация стилей для Telegram Mini Apps */
+body.telegram-app {
+    background-color: var(--app-background-color);
+    color: var(--app-text-color);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* Стили для кнопок */
+.telegram-app .card-button,
+.telegram-app button.primary {
+    background-color: var(--app-button-color);
+    color: var(--app-button-text-color);
+}
+
+/* Стили для карточек */
+.telegram-app .card {
+    background-color: var(--app-card-background);
+    border: 1px solid var(--app-border-color);
+    box-shadow: 0 2px 8px var(--app-shadow-color);
+}
+
+/* Стили для заголовка */
+.telegram-app .app-header {
+    background-color: var(--app-header-background);
+    border-bottom: 1px solid var(--app-border-color);
+}
+
+/* Стили для текста */
+.telegram-app h1,
+.telegram-app h2,
+.telegram-app h3 {
+    color: var(--app-text-color);
+}
+
+.telegram-app p {
+    color: var(--app-hint-color);
+}
+
+/* Стили для ссылок */
+.telegram-app a {
+    color: var(--app-link-color);
+}
+
+/* Стили для бокового меню */
+.telegram-app .sidebar {
+    background-color: var(--app-background-color);
+    border-left: 1px solid var(--app-border-color);
+}
+
+.telegram-app .sidebar-nav a {
+    color: var(--app-text-color);
+}
+
+.telegram-app .sidebar-nav a:hover,
+.telegram-app .sidebar-nav a.active {
+    background-color: var(--app-card-background);
+    color: var(--app-link-color);
+}
+
+/* Адаптация для безопасной зоны в iOS */
+.telegram-app .app-header {
+    padding-top: calc(15px + env(safe-area-inset-top));
+}
+
+.telegram-app .content {
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+}
+
+/* Стили для прогресс-бара */
+.telegram-app .progress-bar {
+    background-color: var(--app-border-color);
+}
+
+.telegram-app .progress-fill {
+    background-color: var(--app-button-color);
+}

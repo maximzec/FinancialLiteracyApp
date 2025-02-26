@@ -60,16 +60,36 @@ export default {
     progress() {
       return (this.step / 4) * 100;
     },
+    // Проверка, запущено ли приложение в Telegram
+    isTelegramApp() {
+      return this.$telegram && this.$telegram.isRunningInTelegram();
+    }
   },
   methods: {
     nextStep() {
       if (this.step < 4) {
         this.step++;
+        
+        // Обновляем кнопку Telegram, если приложение запущено в Telegram
+        if (this.isTelegramApp) {
+          this.setupTelegramMainButton();
+        }
       }
     },
     finishOnboarding() {
       // Логика завершения онбординга
       console.log('Онбординг завершен');
+      
+      // Если приложение запущено в Telegram, отправляем данные в бота
+      if (this.isTelegramApp) {
+        // Отправляем данные о завершении онбординга в Telegram бота
+        this.$telegram.sendData({
+          event: 'onboarding_completed',
+          step: this.step
+        });
+      }
+      
+      this.$emit('onboarding-completed');
     },
     forceBlackBackground() {
       document.body.classList.add('onboarding-active');
@@ -120,10 +140,34 @@ export default {
       
       // Останавливаем интервал
       clearInterval(this.styleInterval);
+    },
+    // Метод для настройки главной кнопки Telegram
+    setupTelegramMainButton() {
+      if (!this.isTelegramApp) return;
+      
+      const buttonText = this.step < 4 ? 'Далее' : 'Завершить';
+      
+      this.$telegram.showMainButton(buttonText, () => {
+        if (this.step < 4) {
+          this.nextStep();
+          this.setupTelegramMainButton(); // Обновляем текст кнопки
+        } else {
+          this.finishOnboarding();
+        }
+      });
     }
   },
   mounted() {
     this.forceBlackBackground();
+    
+    // Если приложение запущено в Telegram, настраиваем интерфейс
+    if (this.isTelegramApp) {
+      // Расширяем приложение на весь экран
+      this.$telegram.expandApp();
+      
+      // Показываем кнопку "Далее" в Telegram
+      this.setupTelegramMainButton();
+    }
   },
   beforeUnmount() {
     this.removeBlackBackground();
