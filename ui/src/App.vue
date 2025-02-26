@@ -61,12 +61,21 @@ export default {
       this.showOnboarding = false;
     }
     
-    // Если приложение запущено в Telegram, получаем данные пользователя
-    this.getTelegramUserData();
-    
-    // Если онбординг уже пройден и приложение запущено в Telegram, показываем главную кнопку
-    if (!this.showOnboarding && this.isTelegramApp) {
-      this.setupTelegramMainButton();
+    // Если приложение запущено в Telegram
+    if (this.isTelegramApp) {
+      // Получаем данные пользователя
+      this.getTelegramUserData();
+      
+      // Запрашиваем полноэкранный режим
+      this.$telegram.requestFullScreen();
+      
+      // Скрываем элементы управления Telegram
+      this.$telegram.hideBackButton();
+      
+      // Если онбординг уже пройден, показываем главную кнопку
+      if (!this.showOnboarding) {
+        this.setupTelegramMainButton();
+      }
     }
   }
 };

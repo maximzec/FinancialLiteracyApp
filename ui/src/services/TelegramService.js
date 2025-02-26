@@ -23,6 +23,12 @@ class TelegramService {
 
                 // Настройка обработчиков событий
                 this.setupEventHandlers();
+
+                // Запрашиваем полноэкранный режим
+                this.requestFullScreen();
+
+                // Скрываем элементы управления Telegram
+                this.hideBackButton();
             } catch (error) {
                 console.error('Failed to initialize Telegram WebApp:', error);
             }
@@ -168,6 +174,76 @@ class TelegramService {
             this.webApp.expand();
         } catch (error) {
             console.error('Failed to expand app:', error);
+        }
+    }
+
+    // Метод для запроса полноэкранного режима
+    requestFullScreen() {
+        if (!this.isInitialized) return;
+
+        try {
+            // Расширяем приложение на весь экран
+            this.webApp.expand();
+
+            // Устанавливаем параметры отображения
+            this.webApp.setViewportSettings({
+                is_expanded: true,
+                is_fullscreen: true
+            });
+
+            console.log('Requested full screen mode');
+        } catch (error) {
+            console.error('Failed to request full screen:', error);
+        }
+    }
+
+    // Метод для скрытия кнопки "Назад" в Telegram
+    hideBackButton() {
+        if (!this.isInitialized) return;
+
+        try {
+            // Скрываем кнопку "Назад"
+            this.webApp.BackButton.hide();
+
+            // Отключаем стандартное поведение при свайпе назад
+            this.webApp.disableClosingConfirmation();
+
+            console.log('Back button hidden');
+        } catch (error) {
+            console.error('Failed to hide back button:', error);
+        }
+    }
+
+    // Метод для показа кнопки "Назад" в Telegram
+    showBackButton(callback) {
+        if (!this.isInitialized) return;
+
+        try {
+            const backButton = this.webApp.BackButton;
+
+            if (backButton) {
+                if (callback) {
+                    backButton.onClick(callback);
+                }
+
+                backButton.show();
+            }
+
+            console.log('Back button shown');
+        } catch (error) {
+            console.error('Failed to show back button:', error);
+        }
+    }
+
+    // Метод для проверки, находится ли приложение в полноэкранном режиме
+    isFullScreen() {
+        if (!this.isInitialized) return false;
+
+        try {
+            return this.webApp.isExpanded;
+        } catch (error) {
+            console.error('Failed to check full screen status:', error);
+            return false;
         }
     }
 }

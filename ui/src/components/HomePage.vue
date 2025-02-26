@@ -168,8 +168,11 @@ export default {
   mounted() {
     // Если приложение запущено в Telegram, настраиваем интерфейс
     if (this.isTelegramApp) {
-      // Расширяем приложение на весь экран
-      this.$telegram.expandApp();
+      // Запрашиваем полноэкранный режим
+      this.$telegram.requestFullScreen();
+      
+      // Скрываем элементы управления Telegram
+      this.$telegram.hideBackButton();
     }
   }
 };
