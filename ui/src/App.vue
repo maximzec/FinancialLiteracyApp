@@ -1,64 +1,22 @@
 <template>
-  <div id="app">
-    <UserOnboarding v-if="showOnboarding" @onboarding-completed="completeOnboarding" />
-    <HomePage v-else />
+  <div id="app" :class="{ 'telegram-app': isTelegramApp }">
+    <router-view />
   </div>
 </template>
 
 <script>
-import UserOnboarding from './components/UserOnboarding.vue';
-import HomePage from './components/HomePage.vue';
-
 export default {
-  components: {
-    UserOnboarding,
-    HomePage
-  },
   data() {
     return {
-      showOnboarding: true,
       telegramUser: null
     };
   },
   methods: {
-    completeOnboarding() {
-      this.showOnboarding = false;
-      // Здесь можно добавить сохранение состояния в localStorage, чтобы не показывать онбординг при повторном посещении
-      localStorage.setItem('onboardingCompleted', 'true');
-      
-      // Если приложение запущено в Telegram, показываем главную кнопку
-      this.setupTelegramMainButton();
-    },
-    
-    // Методы для работы с Telegram Mini Apps
-    setupTelegramMainButton() {
-      if (this.isTelegramApp) {
-        this.$telegram.showMainButton('Продолжить обучение', () => {
-          console.log('Нажата главная кнопка Telegram');
-          // Здесь можно добавить логику для перехода к обучению
-        });
-      }
-    },
-    
     // Получение данных пользователя из Telegram
     getTelegramUserData() {
       if (this.isTelegramApp) {
         this.telegramUser = this.$telegram.getUserData();
         console.log('Данные пользователя Telegram:', this.telegramUser);
-      }
-    },
-    
-    // Метод для настройки полноэкранного режима
-    setupFullScreenMode() {
-      if (this.isTelegramApp) {
-        // Запрашиваем полноэкранный режим
-        this.$telegram.requestFullScreen();
-        
-        // Скрываем элементы управления Telegram
-        this.$telegram.hideBackButton();
-        
-        // Добавляем обработчик для повторного запроса полноэкранного режима
-        window.addEventListener('resize', this.handleResize);
       }
     }
   },
@@ -76,24 +34,16 @@ export default {
       }
     };
     
-    // Проверяем, был ли уже пройден онбординг
-    const onboardingCompleted = localStorage.getItem('onboardingCompleted');
-    if (onboardingCompleted === 'true') {
-      this.showOnboarding = false;
-    }
-    
     // Если приложение запущено в Telegram
     if (this.isTelegramApp) {
       // Получаем данные пользователя
       this.getTelegramUserData();
       
-      // Настраиваем полноэкранный режим
-      this.setupFullScreenMode();
+      // Запрашиваем полноэкранный режим
+      this.$telegram.requestFullScreen();
       
-      // Если онбординг уже пройден, показываем главную кнопку
-      if (!this.showOnboarding) {
-        this.setupTelegramMainButton();
-      }
+      // Скрываем элементы управления Telegram
+      this.$telegram.hideBackButton();
     }
   },
   beforeUnmount() {
@@ -104,18 +54,30 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 body {
   margin: 0;
   padding: 0;
   font-family: 'Inter', sans-serif;
+  background-color: var(--app-background-color, #f5f7fa);
+  color: var(--app-text-color, #333333);
 }
 
 #app {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Добавляем мета-тег для корректного отображения в мобильных браузерах */
+/* Стили для Telegram Mini Apps */
+.telegram-app {
+  background-color: var(--app-background-color);
+  color: var(--app-text-color);
+}
+
+/* Медиа-запросы для адаптивности */
 @media screen and (max-width: 768px) {
   #app {
     max-width: 100vw;

@@ -165,6 +165,11 @@ class TelegramService {
         return this.isInitialized && this.webApp.isExpanded;
     }
 
+    // Метод для обратной совместимости с isAvailable()
+    isAvailable() {
+        return this.isRunningInTelegram();
+    }
+
     // Метод для отправки данных в Telegram бота
     sendData(data) {
         if (!this.isInitialized) return;

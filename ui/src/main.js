@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import router from './router'
 import './assets/styles/telegram-theme.css'
 
 // Импортируем сервис для работы с Telegram
@@ -7,6 +8,9 @@ import telegramService from './services/TelegramService'
 
 // Создаем экземпляр приложения
 const app = createApp(App)
+
+// Добавляем роутер в приложение
+app.use(router)
 
 // Добавляем сервис Telegram в глобальные свойства
 app.config.globalProperties.$telegram = telegramService
@@ -26,9 +30,6 @@ if (isTelegramApp) {
         // Повторно запрашиваем полноэкранный режим при изменении размера окна
         telegramService.requestFullScreen()
     })
-
-    // Добавляем класс для полноэкранного режима
-    document.body.classList.add('fullscreen-active')
 }
 
 // Монтируем приложение
