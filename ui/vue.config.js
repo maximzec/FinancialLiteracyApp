@@ -4,7 +4,17 @@ module.exports = defineConfig({
   publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
   productionSourceMap: false,
   css: {
-    extract: false
+    extract: false,
+    loaderOptions: {
+      postcss: {
+        postcssOptions: {
+          plugins: [
+            require('tailwindcss'),
+            require('autoprefixer'),
+          ]
+        }
+      }
+    }
   },
   configureWebpack: {
     optimization: {

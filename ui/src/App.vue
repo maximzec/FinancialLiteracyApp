@@ -56,12 +56,30 @@ export default {
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+:root {
+  --alpha-red: #EF3124;
+  --alpha-red-light: #FF8185;
+  --alpha-red-dark: #CF2A1E;
+  --alpha-gray-50: #F8F9FA;
+  --alpha-gray-100: #F1F3F5;
+  --alpha-gray-200: #E9ECEF;
+  --alpha-gray-300: #DEE2E6;
+  --alpha-gray-400: #CED4DA;
+  --alpha-gray-500: #ADB5BD;
+  --alpha-gray-600: #6C757D;
+  --alpha-gray-700: #495057;
+  --alpha-gray-800: #343A40;
+  --alpha-gray-900: #212529;
+}
+
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Inter', sans-serif;
-  background-color: var(--app-background-color, #f5f7fa);
-  color: var(--app-text-color, #333333);
+  font-family: 'SF Pro Display', 'Styrene A LC', 'Inter', sans-serif;
+  background-color: var(--alpha-gray-50);
+  color: var(--alpha-gray-900);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #app {
@@ -71,10 +89,36 @@ body {
   flex-direction: column;
 }
 
+/* Кнопки в стиле Альфа-Банка */
+.alpha-button {
+  background-color: var(--alpha-red);
+  color: white;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.alpha-button:hover {
+  background-color: var(--alpha-red-dark);
+}
+
+.alpha-button-outline {
+  border: 1px solid var(--alpha-red);
+  color: var(--alpha-red);
+  background-color: transparent;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.alpha-button-outline:hover {
+  background-color: rgba(239, 49, 36, 0.05);
+}
+
 /* Стили для Telegram Mini Apps */
 .telegram-app {
-  background-color: var(--app-background-color);
-  color: var(--app-text-color);
+  background-color: var(--alpha-gray-50);
+  color: var(--alpha-gray-900);
 }
 
 /* Медиа-запросы для адаптивности */

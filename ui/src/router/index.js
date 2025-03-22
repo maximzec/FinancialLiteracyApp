@@ -1,17 +1,43 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import UserOnboarding from '../components/UserOnboarding.vue'
 import HomePage from '../components/HomePage.vue'
+import LessonsPage from '../components/LessonsPage.vue'
+import ProfilePage from '../components/ProfilePage.vue'
+import LessonDetail from '../components/LessonDetail.vue'
+import LessonCompletedPage from '../components/LessonCompletedPage.vue'
 
 const routes = [
     {
         path: '/',
+        name: 'Home',
+        component: HomePage
+    },
+    {
+        path: '/onboarding',
         name: 'Onboarding',
         component: UserOnboarding
     },
     {
-        path: '/home',
-        name: 'Home',
-        component: HomePage
+        path: '/lessons',
+        name: 'Lessons',
+        component: LessonsPage
+    },
+    {
+        path: '/lesson/:id',
+        name: 'LessonDetail',
+        component: LessonDetail,
+        props: true
+    },
+    {
+        path: '/lesson/:id/completed',
+        name: 'LessonCompleted',
+        component: LessonCompletedPage,
+        props: true
+    },
+    {
+        path: '/profile',
+        name: 'Profile',
+        component: ProfilePage
     }
 ]
 

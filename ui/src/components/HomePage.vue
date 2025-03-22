@@ -1,577 +1,632 @@
 <template>
-  <div class="home-container">
-    <!-- Навигация -->
-    <div class="tbank-navigation">
-      <div class="tbank-navigation__brand">Финансовая грамотность</div>
-      <div class="tbank-navigation__menu">
-        <a href="#" class="tbank-navigation__link">Главная</a>
-        <a href="#" class="tbank-navigation__link">Курсы</a>
-        <a href="#" class="tbank-navigation__link">Статьи</a>
-        <a href="#" class="tbank-navigation__link">Профиль</a>
+  <div class="min-h-screen bg-white flex flex-col">
+    <!-- Шапка в стиле Альфа-Банка -->
+    <header class="px-6 py-4 border-b border-neutral-200 flex justify-between items-center">
+      <div class="flex items-center">
+        <h1 class="text-xl font-bold">
+          <span class="text-alpha-500">Альфа</span>Финансы
+        </h1>
       </div>
-    </div>
+      <button 
+        class="p-2 rounded-full hover:bg-neutral-100 transition-colors"
+        tabindex="0"
+        aria-label="Перейти в профиль"
+        @click="handleProfileClick"
+        @keydown.enter="handleProfileClick"
+        @keydown.space="handleProfileClick"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-neutral-700" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+        </svg>
+      </button>
+    </header>
 
-    <!-- Главный баннер -->
-    <div class="main-banner tbank-slide-up">
-      <div class="main-banner__content">
-        <h1>Финансовая грамотность</h1>
-        <p class="main-banner__subtitle">Начните свой путь к финансовой независимости вместе с нами</p>
-        <button class="tbank-button">Начать обучение</button>
-      </div>
-      <div class="main-banner__image">
-        <img src="https://cdn3d.iconscout.com/3d/premium/thumb/finance-management-5740461-4805695.png" alt="Финансовая грамотность">
-      </div>
-    </div>
-
-    <!-- Раздел курсов -->
-    <section class="section tbank-fade-in">
-      <div class="section__header">
-        <h2>Популярные курсы</h2>
-        <a href="#" class="section__more">Все курсы</a>
+    <div class="flex-1 flex flex-col px-6 py-4">
+      <div class="mb-6">
+        <h2 class="text-2xl font-semibold text-neutral-900 mb-1">Привет 👋</h2>
+        <p class="text-neutral-600">Изучайте финансы без стресса</p>
       </div>
       
-      <div class="tbank-grid">
-        <!-- Карточка курса 1 -->
-        <div class="tbank-card course-card">
-          <div class="tbank-badge">Популярно</div>
-          <div class="course-card__image">
-            <img src="https://cdn3d.iconscout.com/3d/premium/thumb/budget-planning-5554869-4639076.png" alt="Основы финансов">
+      <!-- Секция с балансом знаний -->
+      <div class="mb-6">
+        <div class="p-6 bg-neutral-50 rounded-xl mb-2 border border-neutral-200">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <h3 class="text-sm font-medium text-neutral-500">Текущий баланс знаний</h3>
+              <p class="text-xl font-semibold text-neutral-900">25 <span class="text-sm font-normal text-neutral-500">из 100 XP</span></p>
+            </div>
+            <div class="bg-alpha-500 text-white p-2 rounded-full">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
+              </svg>
+            </div>
           </div>
-          <h3 class="tbank-card__title">Основы личных финансов</h3>
-          <p class="tbank-card__text">Научитесь базовым принципам управления личными финансами и создания бюджета</p>
-          <div class="course-card__footer">
-            <span class="course-card__info">8 уроков • 2 часа</span>
-            <button class="tbank-button">Перейти</button>
-          </div>
-        </div>
-
-        <!-- Карточка курса 2 -->
-        <div class="tbank-card course-card">
-          <div class="tbank-badge tbank-badge--new">Новый</div>
-          <div class="course-card__image">
-            <img src="https://cdn3d.iconscout.com/3d/premium/thumb/investment-5740487-4805717.png" alt="Инвестиции">
-          </div>
-          <h3 class="tbank-card__title">Основы инвестирования</h3>
-          <p class="tbank-card__text">Изучите базовые принципы инвестирования и стратегии формирования инвестиционного портфеля</p>
-          <div class="course-card__footer">
-            <span class="course-card__info">10 уроков • 3 часа</span>
-            <button class="tbank-button">Перейти</button>
+          <div class="h-1.5 w-full bg-neutral-200 rounded-full overflow-hidden">
+            <div 
+              class="h-1.5 bg-alpha-500 rounded-full" 
+              :style="{ width: `${currentLesson.progress}%` }"
+            ></div>
           </div>
         </div>
 
-        <!-- Карточка курса 3 -->
-        <div class="tbank-card course-card">
-          <div class="course-card__image">
-            <img src="https://cdn3d.iconscout.com/3d/premium/thumb/money-savings-5740564-4805788.png" alt="Сбережения">
+        <div 
+          class="p-5 border border-neutral-200 rounded-xl shadow-sm hover:border-alpha-300 transition-colors cursor-pointer bg-white"
+          tabindex="0"
+          aria-label="Перейти к текущему уроку"
+          @click="handleLessonClick"
+          @keydown.enter="handleLessonClick"
+          @keydown.space="handleLessonClick"
+        >
+          <div class="flex items-center mb-3">
+            <div class="h-10 w-10 bg-alpha-100 text-alpha-500 rounded-full flex items-center justify-center mr-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-base font-medium text-neutral-900">{{ currentLesson.title }}</h3>
+              <p class="text-sm text-neutral-500">{{ currentLesson.description }}</p>
+            </div>
           </div>
-          <h3 class="tbank-card__title">Накопления и сбережения</h3>
-          <p class="tbank-card__text">Узнайте, как правильно формировать финансовую подушку безопасности и копить на важные цели</p>
-          <div class="course-card__footer">
-            <span class="course-card__info">6 уроков • 1.5 часа</span>
-            <button class="tbank-button">Перейти</button>
+          <button class="w-full bg-alpha-500 text-white py-3 rounded-lg text-sm font-medium hover:bg-alpha-600 transition-colors">
+            Продолжить обучение
+          </button>
+        </div>
+      </div>
+
+      <!-- Секция "Быстрый доступ" -->
+      <div class="mb-6">
+        <h3 class="text-base font-medium text-neutral-900 mb-4">Быстрый доступ</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <div 
+            class="p-4 border border-neutral-200 rounded-xl shadow-sm hover:border-alpha-300 transition-colors cursor-pointer flex flex-col items-center justify-center bg-white"
+            tabindex="0"
+            aria-label="Перейти ко всем урокам"
+            @click="handleAllLessonsClick"
+            @keydown.enter="handleAllLessonsClick"
+            @keydown.space="handleAllLessonsClick"
+          >
+            <div class="h-10 w-10 bg-alpha-100 text-alpha-500 rounded-full flex items-center justify-center mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+              </svg>
+            </div>
+            <span class="text-sm font-medium text-neutral-900">Все уроки</span>
+          </div>
+          
+          <div 
+            class="p-4 border border-neutral-200 rounded-xl shadow-sm hover:border-alpha-300 transition-colors cursor-pointer flex flex-col items-center justify-center bg-white"
+            tabindex="0"
+            aria-label="Перейти к достижениям"
+            @click="handleProfileClick"
+            @keydown.enter="handleProfileClick"
+            @keydown.space="handleProfileClick"
+          >
+            <div class="h-10 w-10 bg-alpha-100 text-alpha-500 rounded-full flex items-center justify-center mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+              </svg>
+            </div>
+            <span class="text-sm font-medium text-neutral-900">Мой профиль</span>
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- Промо-блок -->
-    <div class="promo-block tbank-slide-up">
-      <div class="promo-block__content">
-        <div class="promo-block__image">
-          <img src="https://cdn3d.iconscout.com/3d/premium/thumb/financial-growth-5044949-4199887.png" alt="Финансовый план">
+      <!-- Совет дня -->
+      <div class="p-5 border border-neutral-100 rounded-xl bg-neutral-50 mb-6">
+        <div class="flex items-center mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" />
+          </svg>
+          <h3 class="text-sm font-medium text-neutral-900">Совет дня</h3>
         </div>
-        <div class="promo-block__text">
-          <h2>Рассчитайте свой финансовый план</h2>
-          <p>Получите персональные рекомендации для достижения финансовых целей</p>
-          <button class="tbank-button">Рассчитать</button>
-        </div>
+        <p class="text-sm text-neutral-600">{{ randomFact }}</p>
       </div>
-    </div>
 
-    <!-- Раздел полезных статей -->
-    <section class="section tbank-fade-in">
-      <div class="section__header">
-        <h2>Полезные статьи</h2>
-        <a href="#" class="section__more">Все статьи</a>
-      </div>
-      
-      <div class="tbank-grid">
-        <!-- Статья 1 -->
-        <div class="tbank-card article-card">
-          <div class="article-card__image">
-            <img src="https://cdn3d.iconscout.com/3d/premium/thumb/money-growth-5160611-4311081.png" alt="Пассивный доход">
-          </div>
-          <div class="article-card__content">
-            <div class="article-card__category">Инвестиции</div>
-            <h3 class="tbank-card__title">Как создать пассивный доход</h3>
-            <p class="tbank-card__text">Узнайте о различных способах создания пассивного дохода и начните путь к финансовой свободе</p>
-            <div class="article-card__footer">
-              <span class="article-card__info">7 мин. чтения</span>
-              <a href="#" class="article-card__link">Читать</a>
+      <!-- Рекомендуемые уроки -->
+      <div class="mb-4">
+        <h3 class="text-base font-medium text-neutral-900 mb-4">Рекомендуемые уроки</h3>
+        <div class="space-y-3">
+          <div 
+            v-for="(lesson, index) in recommendedLessons" 
+            :key="index"
+            class="p-4 border border-neutral-200 rounded-xl bg-white hover:border-alpha-300 transition-colors cursor-pointer"
+            @click="handleLessonCardClick(lesson)"
+          >
+            <div class="flex items-center">
+              <div class="h-10 w-10 bg-alpha-100 text-alpha-500 rounded-full flex items-center justify-center mr-3">
+                <span class="text-sm font-medium">{{ index + 1 }}</span>
+              </div>
+              <div>
+                <h4 class="text-sm font-medium text-neutral-900">{{ lesson.title }}</h4>
+                <p class="text-xs text-neutral-500">{{ lesson.duration }} мин</p>
+              </div>
             </div>
           </div>
         </div>
-
-        <!-- Статья 2 -->
-        <div class="tbank-card article-card">
-          <div class="article-card__image">
-            <img src="https://cdn3d.iconscout.com/3d/premium/thumb/budget-calculator-5744026-4808975.png" alt="Правило 50/30/20">
-          </div>
-          <div class="article-card__content">
-            <div class="article-card__category">Бюджет</div>
-            <h3 class="tbank-card__title">Правило 50/30/20</h3>
-            <p class="tbank-card__text">Простая и эффективная система распределения доходов для достижения финансовых целей</p>
-            <div class="article-card__footer">
-              <span class="article-card__info">5 мин. чтения</span>
-              <a href="#" class="article-card__link">Читать</a>
-            </div>
-          </div>
-        </div>
       </div>
-    </section>
-
-    <!-- 3D декоративные элементы -->
-    <div class="decorative-3d-elements">
-      <div class="coin coin-1"></div>
-      <div class="coin coin-2"></div>
-      <div class="coin coin-3"></div>
-      <div class="coin coin-4"></div>
-      <div class="chart-element"></div>
-      <div class="wallet-element"></div>
     </div>
 
-    <!-- Кнопка возврата к онбордингу -->
-    <div class="back-button-container">
-      <button @click="restartOnboarding" class="tbank-button tbank-button--secondary">Вернуться к онбордингу</button>
-    </div>
+    <!-- Панель навигации в стиле Альфа-Банка -->
+    <nav class="border-t border-neutral-200 bg-white py-3 px-6">
+      <div class="flex justify-around">
+        <button class="flex flex-col items-center text-alpha-500" @click="handleHomeClick">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          <span class="text-xs mt-1">Главная</span>
+        </button>
+        <button class="flex flex-col items-center text-neutral-500" @click="handleAllLessonsClick">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          <span class="text-xs mt-1">Уроки</span>
+        </button>
+        <button class="flex flex-col items-center text-neutral-500" @click="handleProfileClick">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          <span class="text-xs mt-1">Профиль</span>
+        </button>
+      </div>
+    </nav>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'HomePage',
-  data() {
-    return {
-      styleInterval: null
-    }
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const currentLesson = ref({
+  id: 1,
+  title: "Основы личного бюджета",
+  description: "Научитесь правильно планировать свои доходы и расходы",
+  progress: 25
+});
+
+const recommendedLessons = ref([
+  {
+    id: 2,
+    title: "Инвестиции для начинающих",
+    description: "Узнайте как начать инвестировать с минимальным бюджетом",
+    duration: 15
   },
-  computed: {
-    isTelegramApp() {
-      return this.$telegram && this.$telegram.isRunningInTelegram();
-    }
+  {
+    id: 3,
+    title: "Кредиты: как не попасть в долговую яму",
+    description: "Разбираемся в видах кредитов и их особенностях",
+    duration: 20
   },
-  methods: {
-    restartOnboarding() {
-      localStorage.removeItem('onboardingCompleted');
-      this.$router.push('/');
-    }
-  },
-  mounted() {
-    document.body.classList.add('telegram-app');
-    
-    if (this.isTelegramApp) {
-      this.$telegram.requestFullScreen();
-      this.$telegram.hideBackButton();
-    }
-  },
-  beforeUnmount() {
-    if (this.styleInterval) {
-      clearInterval(this.styleInterval);
-    }
+  {
+    id: 4,
+    title: "Финансовая подушка безопасности",
+    description: "Как и зачем создавать запас на черный день",
+    duration: 10
   }
-}
+]);
+
+const facts = ref([
+  "70% людей, ведущих бюджет, достигают финансовых целей быстрее",
+  "Регулярные инвестиции даже небольших сумм могут принести значительный доход через 10-15 лет",
+  "Финансовая грамотность помогает снизить стресс и улучшить качество жизни",
+  "Более 60% миллионеров — обычные люди, которые грамотно управляют своими финансами"
+]);
+
+const randomFact = computed(() => {
+  const randomIndex = Math.floor(Math.random() * facts.value.length);
+  return facts.value[randomIndex];
+});
+
+onMounted(() => {
+  // Здесь будет запрос к API для получения текущего урока пользователя
+  fetchCurrentLesson();
+});
+
+const fetchCurrentLesson = () => {
+  // Здесь будет логика для получения текущего урока с сервера
+};
+
+const handleHomeClick = () => {
+  router.push('/');
+};
+
+const handleLessonClick = () => {
+  router.push(`/lessons/${currentLesson.value.id}`);
+};
+
+const handleAllLessonsClick = () => {
+  router.push('/lessons');
+};
+
+const handleProfileClick = () => {
+  router.push('/profile');
+};
+
+const handleLessonCardClick = (lesson) => {
+  router.push(`/lessons/${lesson.id}`);
+};
 </script>
 
 <style scoped>
+/* Base styles */
 .home-container {
   min-height: 100vh;
-  padding-bottom: 60px;
-  box-sizing: border-box;
-  background-color: var(--tbank-light-gray);
-  position: relative;
-  overflow-y: auto;
-  overflow-x: hidden;
-  max-height: 100vh;
-}
-
-/* Главный баннер */
-.main-banner {
   display: flex;
-  align-items: center;
-  padding: 40px 24px;
-  background: var(--app-gradient);
-  margin-bottom: 40px;
-  border-radius: 0 0 30px 30px;
+  flex-direction: column;
+  padding: 24px;
+  background-color: #f8faff;
   position: relative;
   overflow: hidden;
 }
 
-.main-banner__content {
-  flex: 1;
-  padding-right: 20px;
-  position: relative;
-  z-index: 2;
+/* Background decorations */
+.bg-decoration {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
 }
 
-.main-banner__image {
-  flex: 1;
-  max-width: 50%;
-  display: none;
-  position: relative;
-  z-index: 2;
+.bg-circle-1 {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.1), rgba(74, 144, 226, 0));
+  top: -100px;
+  right: -100px;
 }
 
-.main-banner__image img {
+.bg-circle-2 {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(97, 218, 251, 0.1), rgba(97, 218, 251, 0));
+  bottom: 20%;
+  left: -50px;
+}
+
+.bg-pattern {
   width: 100%;
-  height: auto;
-  max-width: 300px;
-  filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1));
-  transform: scale(1.2);
-  animation: float 6s ease-in-out infinite;
+  height: 100%;
+  background-image: radial-gradient(rgba(74, 144, 226, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.3;
 }
 
-.main-banner h1 {
-  font-size: 36px;
-  font-weight: 800;
-  margin-bottom: 16px;
-  color: var(--tbank-black);
-}
-
-.main-banner__subtitle {
-  font-size: 18px;
-  margin-bottom: 24px;
-  color: var(--tbank-dark-gray);
-  max-width: 500px;
-}
-
-/* Секции */
-.section {
-  padding: 0 24px;
-  margin-bottom: 50px;
-}
-
-.section__header {
+/* Header */
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
-}
-
-.section__more {
-  font-size: 16px;
-  color: var(--app-secondary-color);
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.section__more:hover {
-  text-decoration: underline;
-}
-
-/* Карточки курсов */
-.course-card {
+  margin-bottom: 36px;
   position: relative;
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  z-index: 2;
 }
 
-.course-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
+.welcome-message {
+  font-size: 28px;
+  background: linear-gradient(135deg, #4A90E2, #61DAFB);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 800;
+  margin: 0;
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
 }
 
-.course-card__image {
-  height: 180px;
-  margin: -24px -24px 16px -24px;
-  overflow: hidden;
-  background-color: #f8f9fa;
+.welcome-message:hover {
+  transform: scale(1.03);
+}
+
+.profile-link {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4A90E2, #61DAFB);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(74, 144, 226, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.profile-link:hover, .profile-link:focus {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(74, 144, 226, 0.3);
+}
+
+.profile-icon {
+  font-size: 24px;
+  color: white;
+}
+
+.profile-tooltip {
+  position: absolute;
+  bottom: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.profile-link:hover .profile-tooltip, .profile-link:focus .profile-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Section headers */
+.section-header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  margin-bottom: 16px;
+  position: relative;
 }
 
-.course-card__image img {
-  width: 60%;
-  height: auto;
-  object-fit: contain;
-  transition: transform 0.4s ease;
-  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.1));
+h2 {
+  color: #333;
+  font-size: 20px;
+  margin: 0;
+  z-index: 1;
+  position: relative;
 }
 
-.course-card:hover .course-card__image img {
-  transform: scale(1.05) translateY(-5px);
+.ribbon {
+  height: 2px;
+  background: linear-gradient(90deg, #4A90E2, rgba(97, 218, 251, 0));
+  margin-left: 12px;
+  flex-grow: 1;
 }
 
-.tbank-badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
+/* Current lesson section */
+.current-lesson, .all-lessons-section, .quick-facts {
+  margin-bottom: 36px;
+  position: relative;
   z-index: 1;
 }
 
-.course-card__footer {
+.lesson-card {
+  background: linear-gradient(135deg, white, #f8faff);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 10px 25px rgba(74, 144, 226, 0.07);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 16px;
-}
-
-.course-card__info {
-  font-size: 14px;
-  color: var(--app-hint-color);
-}
-
-/* Статьи */
-.article-card__image {
-  height: 180px;
-  margin: -24px -24px 16px -24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(74, 144, 226, 0.1);
+  position: relative;
   overflow: hidden;
-  background-color: #f8f9fa;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.article-card__image img {
-  width: 60%;
-  height: auto;
-  object-fit: contain;
-  transition: transform 0.4s ease;
-  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.1));
+.lesson-card:hover, .lesson-card:focus {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(74, 144, 226, 0.1);
 }
 
-.article-card:hover .article-card__image img {
-  transform: scale(1.05) translateY(-5px);
-}
-
-.article-card__category {
-  display: inline-block;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--app-secondary-color);
-  margin-bottom: 8px;
-}
-
-.article-card__footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.article-card__info {
-  font-size: 14px;
-  color: var(--app-hint-color);
-}
-
-.article-card__link {
-  color: var(--app-secondary-color);
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.article-card__link:hover {
-  text-decoration: underline;
-}
-
-/* Промо-блок */
-.promo-block {
-  background: var(--app-gradient);
-  padding: 40px 24px;
-  margin: 0 24px 50px;
-  border-radius: var(--app-radius-large);
-}
-
-.promo-block__content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.promo-block__image {
-  width: 150px;
-  height: 150px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.promo-block__image img {
-  width: 100%;
-  height: auto;
-  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
-  animation: floatSlow 8s ease-in-out infinite;
-}
-
-.promo-block__text {
-  max-width: 600px;
-}
-
-.promo-block h2 {
-  font-size: 28px;
-  margin-bottom: 16px;
-  color: var(--tbank-black);
-}
-
-.promo-block p {
-  font-size: 18px;
-  margin-bottom: 24px;
-  color: var(--tbank-dark-gray);
-}
-
-/* 3D Декоративные элементы */
-.decorative-3d-elements {
+.lesson-card:after {
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #4A90E2, #61DAFB);
+}
+
+.lesson-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.1), rgba(97, 218, 251, 0.1));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.icon {
+  font-size: 30px;
+}
+
+.lesson-content {
+  flex: 1;
+}
+
+.lesson-content h3 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.lesson-content p {
+  margin: 0 0 16px 0;
+  color: #666;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.lesson-progress {
+  margin-bottom: 16px;
+}
+
+.progress-text {
+  display: block;
+  margin-top: 5px;
+  color: #4A90E2;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.start-btn {
+  background: linear-gradient(135deg, #4A90E2, #61DAFB);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(74, 144, 226, 0.3);
+}
+
+.start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(74, 144, 226, 0.4);
+  background: linear-gradient(135deg, #3a80d2, #51CAEB);
+}
+
+.btn-icon {
+  font-size: 18px;
+  margin-left: 8px;
+  transition: transform 0.3s ease;
+}
+
+.start-btn:hover .btn-icon {
+  transform: translateX(5px);
+}
+
+/* All lessons button */
+.all-lessons-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border: none;
+  border-radius: 16px;
+  padding: 20px;
+  width: 100%;
+  box-shadow: 0 10px 25px rgba(74, 144, 226, 0.07);
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  border: 1px solid rgba(74, 144, 226, 0.1);
+}
+
+.all-lessons-btn:hover, .all-lessons-btn:focus {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(74, 144, 226, 0.1);
+}
+
+.btn-content {
+  display: flex;
+  align-items: center;
+}
+
+.btn-icon-left {
+  font-size: 22px;
+  margin-right: 12px;
+}
+
+.arrow {
+  color: #4A90E2;
+  font-weight: bold;
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+.all-lessons-btn:hover .arrow {
+  transform: translateX(5px);
+}
+
+/* Quick facts section */
+.quick-facts {
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.fact-card {
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.05), rgba(97, 218, 251, 0.05));
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(74, 144, 226, 0.1);
+  box-shadow: 0 5px 15px rgba(74, 144, 226, 0.05);
+  position: relative;
   overflow: hidden;
 }
 
-.coin {
+.fact-card:before {
+  content: '';
   position: absolute;
-  width: 50px;
-  height: 50px;
-  background-image: url('https://cdn3d.iconscout.com/3d/premium/thumb/bitcoin-5044920-4199858.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0.2;
-  z-index: -1;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(97, 218, 251, 0.1), transparent);
+  top: -50px;
+  right: -50px;
+  border-radius: 50%;
 }
 
-.coin-1 {
-  top: 15%;
-  left: 10%;
-  animation: floatCoin 10s ease-in-out infinite;
+.fact-icon {
+  font-size: 24px;
+  margin-right: 16px;
+  flex-shrink: 0;
 }
 
-.coin-2 {
-  bottom: 20%;
-  right: 5%;
-  width: 40px;
-  height: 40px;
-  animation: floatCoin 12s ease-in-out infinite 1s;
+.fact-text {
+  font-size: 15px;
+  color: #555;
+  line-height: 1.5;
+  font-style: italic;
+  margin: 0;
 }
 
-.coin-3 {
-  top: 60%;
-  left: 7%;
-  width: 30px;
-  height: 30px;
-  animation: floatCoin 9s ease-in-out infinite 2s;
+/* Animation for page loading */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.coin-4 {
-  top: 30%;
-  right: 10%;
-  width: 25px;
-  height: 25px;
-  animation: floatCoin 11s ease-in-out infinite 3s;
+.home-container > * {
+  animation: fadeIn 0.5s ease forwards;
+  opacity: 0;
 }
 
-.chart-element {
-  position: absolute;
-  bottom: 10%;
-  left: 15%;
-  width: 60px;
-  height: 60px;
-  background-image: url('https://cdn3d.iconscout.com/3d/premium/thumb/financial-growth-5045003-4199941.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0.2;
-  z-index: -1;
-  animation: floatSlow 15s ease-in-out infinite;
+.header {
+  animation-delay: 0.1s;
 }
 
-.wallet-element {
-  position: absolute;
-  top: 40%;
-  right: 20%;
-  width: 55px;
-  height: 55px;
-  background-image: url('https://cdn3d.iconscout.com/3d/premium/thumb/wallet-5045123-4200061.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0.2;
-  z-index: -1;
-  animation: floatSlow 13s ease-in-out infinite 2s;
+.current-lesson {
+  animation-delay: 0.2s;
 }
 
-/* Кнопка возврата */
-.back-button-container {
-  text-align: center;
-  margin-top: 40px;
+.all-lessons-section {
+  animation-delay: 0.3s;
 }
 
-/* Анимации */
-@keyframes float {
-  0%, 100% {
-    transform: scale(1.2) translateY(0);
-  }
-  50% {
-    transform: scale(1.2) translateY(-10px);
-  }
+.quick-facts {
+  animation-delay: 0.4s;
 }
 
-@keyframes floatSlow {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-15px) rotate(5deg);
-  }
-}
-
-@keyframes floatCoin {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  25% {
-    transform: translateY(-15px) rotate(5deg);
-  }
-  50% {
-    transform: translateY(0) rotate(10deg);
-  }
-  75% {
-    transform: translateY(15px) rotate(5deg);
-  }
-}
-
-/* Адаптивность */
-@media (min-width: 768px) {
-  .main-banner {
-    padding: 60px 40px;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .lesson-card {
+    flex-direction: column;
   }
   
-  .main-banner__image {
-    display: block;
-  }
-  
-  .main-banner h1 {
-    font-size: 48px;
-  }
-  
-  .section, .promo-block {
-    padding: 0 40px;
-    margin-left: 40px;
-    margin-right: 40px;
-  }
-
-  .promo-block__content {
-    flex-direction: row;
-    text-align: left;
-  }
-
-  .promo-block__image {
-    margin-bottom: 0;
-    margin-right: 40px;
+  .lesson-icon {
+    margin-right: 0;
+    margin-bottom: 16px;
   }
 }
 </style> 
