@@ -36,7 +36,8 @@ module.exports = {
             },
             // Сохраняем прежние цвета indigo для обратной совместимости, но добавляем цвета альфа
             fontFamily: {
-                sans: ['"SF Pro Display"', '"Styrene A LC"', 'Inter', 'sans-serif'],
+                sans: ['Rubik', '"SF Pro Display"', '"Styrene A LC"', 'Inter', 'sans-serif'],
+                rubik: ['Rubik', 'sans-serif'],
             },
         },
     },

@@ -5,6 +5,7 @@ import LessonsPage from '../components/LessonsPage.vue'
 import ProfilePage from '../components/ProfilePage.vue'
 import LessonDetail from '../components/LessonDetail.vue'
 import LessonCompletedPage from '../components/LessonCompletedPage.vue'
+import IndividualPlanPage from '../components/IndividualPlanPage.vue'
 
 const routes = [
     {
@@ -38,6 +39,11 @@ const routes = [
         path: '/profile',
         name: 'Profile',
         component: ProfilePage
+    },
+    {
+        path: '/individual-plan',
+        name: 'IndividualPlan',
+        component: IndividualPlanPage
     }
 ]
 

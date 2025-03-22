@@ -1,27 +1,6 @@
 <template>
   <div class="min-h-screen bg-white flex flex-col">
-    <!-- Шапка в стиле Альфа-Банка -->
-    <header class="px-6 py-4 border-b border-neutral-200 flex justify-between items-center">
-      <div class="flex items-center">
-        <h1 class="text-xl font-bold">
-          <span class="text-alpha-500">Альфа</span>Финансы
-        </h1>
-      </div>
-      <button 
-        class="p-2 rounded-full hover:bg-neutral-100 transition-colors"
-        tabindex="0"
-        aria-label="Перейти в профиль"
-        @click="handleProfileClick"
-        @keydown.enter="handleProfileClick"
-        @keydown.space="handleProfileClick"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-neutral-700" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-        </svg>
-      </button>
-    </header>
-
-    <div class="flex-1 flex flex-col px-6 py-4">
+    <div class="flex-1 flex flex-col px-6 pt-8 pb-4">
       <div class="mb-6">
         <h2 class="text-2xl font-semibold text-neutral-900 mb-1">Привет 👋</h2>
         <p class="text-neutral-600">Изучайте финансы без стресса</p>
@@ -29,23 +8,29 @@
       
       <!-- Секция с балансом знаний -->
       <div class="mb-6">
-        <div class="p-6 bg-neutral-50 rounded-xl mb-2 border border-neutral-200">
-          <div class="flex justify-between items-start mb-4">
-            <div>
-              <h3 class="text-sm font-medium text-neutral-500">Текущий баланс знаний</h3>
-              <p class="text-xl font-semibold text-neutral-900">25 <span class="text-sm font-normal text-neutral-500">из 100 XP</span></p>
+        <!-- Карточка коинов в стиле Альфа-Банка -->
+        <div class="p-6 rounded-xl mb-2 relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-purple-700 h-48">
+          <!-- Декоративные элементы с анимацией -->
+          <div class="absolute bottom-[-10%] right-[-5%] w-32 h-32 rounded-full bg-red-500 opacity-20 animate-pulse-slow"></div>
+          <div class="absolute top-[-10%] left-[-5%] w-40 h-40 rounded-full bg-yellow-300 opacity-10 animate-pulse-medium"></div>
+          <div class="absolute bottom-[-30%] left-[20%] w-60 h-60 rounded-full bg-green-400 opacity-10 animate-float-slow"></div>
+          
+          <!-- Основное содержимое -->
+          <div class="flex flex-col h-full justify-center items-center relative z-10">
+            <div class="text-center mb-5">
+              <h3 class="text-base font-medium text-white/80 mb-1">У вас</h3>
+              <p class="text-5xl font-bold text-white">25 коинов</p>
             </div>
-            <div class="bg-alpha-500 text-white p-2 rounded-full">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
+            
+            <button 
+              class="bg-white/20 hover:bg-white/30 transition-colors text-white py-2 px-6 rounded-lg text-sm font-medium flex items-center backdrop-blur-sm"
+              @click="handleCoinShopClick"
+            >
+              В магазин
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
               </svg>
-            </div>
-          </div>
-          <div class="h-1.5 w-full bg-neutral-200 rounded-full overflow-hidden">
-            <div 
-              class="h-1.5 bg-alpha-500 rounded-full" 
-              :style="{ width: `${currentLesson.progress}%` }"
-            ></div>
+            </button>
           </div>
         </div>
 
@@ -81,6 +66,22 @@
           <div 
             class="p-4 border border-neutral-200 rounded-xl shadow-sm hover:border-alpha-300 transition-colors cursor-pointer flex flex-col items-center justify-center bg-white"
             tabindex="0"
+            aria-label="Перейти к профилю"
+            @click="handleProfileClick"
+            @keydown.enter="handleProfileClick"
+            @keydown.space="handleProfileClick"
+          >
+            <div class="h-10 w-10 bg-alpha-100 text-alpha-500 rounded-full flex items-center justify-center mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <span class="text-sm font-medium text-neutral-900">Мой профиль</span>
+          </div>
+          
+          <div 
+            class="p-4 border border-neutral-200 rounded-xl shadow-sm hover:border-alpha-300 transition-colors cursor-pointer flex flex-col items-center justify-center bg-white"
+            tabindex="0"
             aria-label="Перейти ко всем урокам"
             @click="handleAllLessonsClick"
             @keydown.enter="handleAllLessonsClick"
@@ -97,17 +98,17 @@
           <div 
             class="p-4 border border-neutral-200 rounded-xl shadow-sm hover:border-alpha-300 transition-colors cursor-pointer flex flex-col items-center justify-center bg-white"
             tabindex="0"
-            aria-label="Перейти к достижениям"
-            @click="handleProfileClick"
-            @keydown.enter="handleProfileClick"
-            @keydown.space="handleProfileClick"
+            aria-label="Перейти к индивидуальному плану обучения"
+            @click="handleIndividualPlanClick"
+            @keydown.enter="handleIndividualPlanClick"
+            @keydown.space="handleIndividualPlanClick"
           >
             <div class="h-10 w-10 bg-alpha-100 text-alpha-500 rounded-full flex items-center justify-center mb-2">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
               </svg>
             </div>
-            <span class="text-sm font-medium text-neutral-900">Мой профиль</span>
+            <span class="text-sm font-medium text-neutral-900">Индивидуальный план</span>
           </div>
         </div>
       </div>
@@ -123,28 +124,6 @@
         <p class="text-sm text-neutral-600">{{ randomFact }}</p>
       </div>
 
-      <!-- Рекомендуемые уроки -->
-      <div class="mb-4">
-        <h3 class="text-base font-medium text-neutral-900 mb-4">Рекомендуемые уроки</h3>
-        <div class="space-y-3">
-          <div 
-            v-for="(lesson, index) in recommendedLessons" 
-            :key="index"
-            class="p-4 border border-neutral-200 rounded-xl bg-white hover:border-alpha-300 transition-colors cursor-pointer"
-            @click="handleLessonCardClick(lesson)"
-          >
-            <div class="flex items-center">
-              <div class="h-10 w-10 bg-alpha-100 text-alpha-500 rounded-full flex items-center justify-center mr-3">
-                <span class="text-sm font-medium">{{ index + 1 }}</span>
-              </div>
-              <div>
-                <h4 class="text-sm font-medium text-neutral-900">{{ lesson.title }}</h4>
-                <p class="text-xs text-neutral-500">{{ lesson.duration }} мин</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- Панель навигации в стиле Альфа-Банка -->
@@ -186,27 +165,6 @@ const currentLesson = ref({
   progress: 25
 });
 
-const recommendedLessons = ref([
-  {
-    id: 2,
-    title: "Инвестиции для начинающих",
-    description: "Узнайте как начать инвестировать с минимальным бюджетом",
-    duration: 15
-  },
-  {
-    id: 3,
-    title: "Кредиты: как не попасть в долговую яму",
-    description: "Разбираемся в видах кредитов и их особенностях",
-    duration: 20
-  },
-  {
-    id: 4,
-    title: "Финансовая подушка безопасности",
-    description: "Как и зачем создавать запас на черный день",
-    duration: 10
-  }
-]);
-
 const facts = ref([
   "70% людей, ведущих бюджет, достигают финансовых целей быстрее",
   "Регулярные инвестиции даже небольших сумм могут принести значительный доход через 10-15 лет",
@@ -244,8 +202,12 @@ const handleProfileClick = () => {
   router.push('/profile');
 };
 
-const handleLessonCardClick = (lesson) => {
-  router.push(`/lessons/${lesson.id}`);
+const handleIndividualPlanClick = () => {
+  router.push('/individual-plan');
+};
+
+const handleCoinShopClick = () => {
+  router.push('/coin-shop');
 };
 </script>
 
@@ -259,6 +221,57 @@ const handleLessonCardClick = (lesson) => {
   background-color: #f8faff;
   position: relative;
   overflow: hidden;
+}
+
+/* Анимации для эмодзи и фоновых элементов */
+.coin-emoji {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+@keyframes float-medium {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-8px) rotate(-5deg); }
+}
+
+@keyframes float-fast {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-12px) rotate(8deg); }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { transform: scale(1); opacity: 0.2; }
+  50% { transform: scale(1.1); opacity: 0.25; }
+}
+
+@keyframes pulse-medium {
+  0%, 100% { transform: scale(1); opacity: 0.1; }
+  50% { transform: scale(1.15); opacity: 0.15; }
+}
+
+.animate-float-slow {
+  animation: float-slow 5s ease-in-out infinite;
+}
+
+.animate-float-medium {
+  animation: float-medium 4s ease-in-out infinite;
+}
+
+.animate-float-fast {
+  animation: float-fast 3s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 8s ease-in-out infinite;
+}
+
+.animate-pulse-medium {
+  animation: pulse-medium 6s ease-in-out infinite;
 }
 
 /* Background decorations */
@@ -287,11 +300,8 @@ const handleLessonCardClick = (lesson) => {
 }
 
 .bg-pattern {
-  width: 100%;
-  height: 100%;
-  background-image: radial-gradient(rgba(74, 144, 226, 0.05) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
   background-size: 20px 20px;
-  opacity: 0.3;
 }
 
 /* Header */
