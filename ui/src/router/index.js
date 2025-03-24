@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import UserOnboarding from '../components/UserOnboarding.vue'
 import HomePage from '../components/HomePage.vue'
+import OnboardingPage from '../components/OnboardingPage.vue'
 import LessonsPage from '../components/LessonsPage.vue'
 import ProfilePage from '../components/ProfilePage.vue'
 import LessonDetail from '../components/LessonDetail.vue'
-import LessonCompletedPage from '../components/LessonCompletedPage.vue'
 import IndividualPlanPage from '../components/IndividualPlanPage.vue'
+import CoinShopPage from '../components/CoinShopPage.vue'
 
 const routes = [
     {
@@ -16,12 +16,17 @@ const routes = [
     {
         path: '/onboarding',
         name: 'Onboarding',
-        component: UserOnboarding
+        component: OnboardingPage
     },
     {
         path: '/lessons',
         name: 'Lessons',
         component: LessonsPage
+    },
+    {
+        path: '/profile',
+        name: 'Profile',
+        component: ProfilePage
     },
     {
         path: '/lesson/:id',
@@ -30,20 +35,14 @@ const routes = [
         props: true
     },
     {
-        path: '/lesson/:id/completed',
-        name: 'LessonCompleted',
-        component: LessonCompletedPage,
-        props: true
-    },
-    {
-        path: '/profile',
-        name: 'Profile',
-        component: ProfilePage
-    },
-    {
         path: '/individual-plan',
         name: 'IndividualPlan',
         component: IndividualPlanPage
+    },
+    {
+        path: '/coin-shop',
+        name: 'CoinShop',
+        component: CoinShopPage
     }
 ]
 

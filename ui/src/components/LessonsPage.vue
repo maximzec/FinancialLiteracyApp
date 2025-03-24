@@ -61,10 +61,13 @@
       
       <!-- Список уроков -->
       <h3 class="text-lg font-semibold text-neutral-900 mb-4">Все уроки</h3>
-      <div class="space-y-4">
+      <div v-if="loading" class="flex justify-center items-center py-8">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-alpha-500"></div>
+      </div>
+      <div v-else class="space-y-4">
         <div 
           v-for="(lesson, index) in filteredLessons" 
-          :key="index"
+          :key="lesson.id"
           class="bg-white rounded-xl border border-neutral-200 p-5 cursor-pointer hover:border-alpha-300 transition-colors"
           @click="openLesson(lesson)"
         >
@@ -128,8 +131,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { LessonService } from '../services/LessonService';
 
 const router = useRouter();
 
@@ -147,62 +151,45 @@ const categories = ref([
 const selectedCategory = ref('all');
 
 // Данные уроков
-const lessons = ref([
-  {
-    id: 1,
-    title: 'Основы личного бюджета',
-    description: 'Научитесь планировать доходы и расходы для достижения финансовых целей',
-    category: 'Бюджет',
-    duration: 15,
-    progress: 100,
-    completed: true
-  },
-  {
-    id: 2,
-    title: 'Экономия и накопления',
-    description: 'Узнайте эффективные стратегии экономии денег для создания накоплений',
-    category: 'Накопления',
-    duration: 20,
-    progress: 65,
-    completed: false
-  },
-  {
-    id: 3,
-    title: 'Инвестиции для начинающих',
-    description: 'Основы инвестирования и выбор подходящей стратегии для новичков',
-    category: 'Инвестиции',
-    duration: 25,
-    progress: 0,
-    completed: false
-  },
-  {
-    id: 4,
-    title: 'Кредиты: виды и особенности',
-    description: 'Разбираемся в видах кредитов и учимся выбирать наиболее выгодные условия',
-    category: 'Кредиты',
-    duration: 18,
-    progress: 0,
-    completed: false
-  },
-  {
-    id: 5,
-    title: 'Налоговые вычеты и льготы',
-    description: 'Как получить налоговые вычеты и сэкономить на уплате налогов',
-    category: 'Налоги',
-    duration: 22,
-    progress: 0,
-    completed: false
-  },
-  {
-    id: 6,
-    title: 'Финансовая подушка безопасности',
-    description: 'Как и зачем создавать запас на черный день',
-    category: 'Накопления',
-    duration: 12,
-    progress: 0,
-    completed: false
+const lessons = ref([]);
+const loading = ref(true);
+
+// Загрузка уроков
+const fetchLessons = async () => {
+  try {
+    loading.value = true;
+    const fetchedLessons = await LessonService.getLessons();
+    lessons.value = fetchedLessons.map(lesson => ({
+      ...lesson,
+      category: getLessonCategory(lesson.id),
+      duration: calculateLessonDuration(lesson),
+      progress: 0, // Здесь можно добавить логику расчета прогресса
+      completed: false // Здесь можно добавить логику проверки завершения
+    }));
+  } catch (error) {
+    console.error('Ошибка при загрузке уроков:', error);
+  } finally {
+    loading.value = false;
   }
-]);
+};
+
+// Определение категории урока по ID
+const getLessonCategory = (lessonId) => {
+  const categoryMap = {
+    1: 'Бюджет',
+    2: 'Инвестиции',
+    3: 'Накопления',
+    4: 'Кредиты',
+    5: 'Налоги',
+    6: 'Накопления'
+  };
+  return categoryMap[lessonId] || 'Другое';
+};
+
+// Расчет длительности урока
+const calculateLessonDuration = (lesson) => {
+  return lesson.steps.length * 5; // Примерная длительность: 5 минут на шаг
+};
 
 // Отфильтрованные уроки
 const filteredLessons = computed(() => {
@@ -234,7 +221,7 @@ const selectCategory = (categoryId) => {
 };
 
 const openLesson = (lesson) => {
-  router.push(`/lessons/${lesson.id}`);
+  router.push(`/lesson/${lesson.id}`);
 };
 
 const goBack = () => {
@@ -252,4 +239,9 @@ const goToLessons = () => {
 const goToProfile = () => {
   router.push('/profile');
 };
+
+// Загружаем уроки при монтировании компонента
+onMounted(() => {
+  fetchLessons();
+});
 </script> 
