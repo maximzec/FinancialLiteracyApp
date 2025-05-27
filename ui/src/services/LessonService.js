@@ -1,153 +1,348 @@
-// Имитация данных уроков
-const lessons = {
-    1: {
-        id: 1,
-        title: 'Основы личного бюджета',
-        description: 'Научитесь планировать и вести учет доходов и расходов',
-        steps: [
-            {
-                title: 'Что такое личный бюджет?',
-                content: `
-          <p>Личный бюджет — это план управления вашими доходами и расходами за определенный период времени. Это инструмент, который помогает вам контролировать свои финансы и достигать финансовых целей.</p>
-          <p>Основные компоненты личного бюджета:</p>
-          <ul>
-            <li>Доходы — все источники поступления денег</li>
-            <li>Расходы — все направления трат денег</li>
-            <li>Сбережения — часть доходов, которую вы откладываете</li>
-          </ul>
-        `,
-                hasQuiz: false
-            },
-            {
-                title: 'Почему важно вести бюджет?',
-                content: `
-          <p>Ведение бюджета дает вам множество преимуществ:</p>
-          <ul>
-            <li>Полный контроль над своими финансами</li>
-            <li>Возможность выявить и сократить ненужные расходы</li>
-            <li>Способность быстрее достигать финансовых целей</li>
-            <li>Снижение стресса и беспокойства о деньгах</li>
-            <li>Возможность создать финансовую подушку безопасности</li>
-          </ul>
-        `,
-                hasQuiz: true,
-                quizQuestion: 'Какое из следующих утверждений НЕ является преимуществом ведения личного бюджета?',
-                quizOptions: [
-                    'Выявление лишних расходов',
-                    'Увеличение доходов без дополнительной работы',
-                    'Снижение финансового стресса',
-                    'Ускорение достижения финансовых целей'
-                ]
-            },
-            {
-                title: 'Как составить личный бюджет?',
-                content: `
-          <p>Для составления эффективного личного бюджета следуйте этим шагам:</p>
-          <ol>
-            <li>Определите период бюджетирования (неделя, месяц, год)</li>
-            <li>Запишите все источники дохода за этот период</li>
-            <li>Перечислите все ваши расходы, разбив их на категории</li>
-            <li>Вычтите расходы из доходов</li>
-            <li>Проанализируйте результат и скорректируйте при необходимости</li>
-          </ol>
-          <p>Важно быть честными с собой и записывать абсолютно все траты, даже мелкие.</p>
-        `,
-                hasQuiz: true,
-                quizQuestion: 'Что является первым шагом при составлении личного бюджета?',
-                quizOptions: [
-                    'Выбор периода бюджетирования',
-                    'Запись всех расходов',
-                    'Анализ предыдущих трат',
-                    'Определение финансовых целей'
-                ]
-            }
-        ]
-    },
-    2: {
-        id: 2,
-        title: 'Основы инвестирования',
-        description: 'Изучите базовые принципы инвестирования и научитесь принимать правильные инвестиционные решения',
-        steps: [
-            {
-                title: 'Что такое инвестиции?',
-                content: `
-          <p>Инвестиции — это вложение денег с целью получения дохода в будущем. Инвестировать можно в различные активы:</p>
-          <ul>
-            <li>Акции компаний</li>
-            <li>Облигации</li>
-            <li>Недвижимость</li>
-            <li>Криптовалюты</li>
-          </ul>
-          <p>Важно помнить, что инвестиции всегда связаны с риском потери части или всех вложенных средств.</p>
-        `,
-                hasQuiz: false
-            },
-            {
-                title: 'Основные принципы инвестирования',
-                content: `
-          <p>Для успешного инвестирования важно следовать основным принципам:</p>
-          <ul>
-            <li>Диверсификация — распределение инвестиций по разным активам</li>
-            <li>Долгосрочность — инвестиции должны быть рассчитаны на длительный срок</li>
-            <li>Регулярность — постоянное инвестирование небольших сумм</li>
-            <li>Инвестирование только свободных средств</li>
-          </ul>
-        `,
-                hasQuiz: true,
-                quizQuestion: 'Какой принцип инвестирования помогает снизить риски?',
-                quizOptions: [
-                    'Диверсификация',
-                    'Срочность',
-                    'Концентрация',
-                    'Специализация'
-                ]
-            }
-        ]
-    }
-};
+import ApiService from './ApiService';
+import GamificationService from './GamificationService';
+import AIService from './AIService';
 
 export const LessonService = {
     // Получение урока по ID
     async getLesson(id) {
-        // Имитация задержки сети
-        await new Promise(resolve => setTimeout(resolve, 500));
-        return lessons[id];
+        try {
+            console.log(`[Lessons] Получение урока ${id}`);
+
+            const response = await ApiService.get(`/lessons/${id}`);
+
+            // Получаем прогресс пользователя для урока
+            const progress = await this.getLessonProgress(id);
+
+            return {
+                ...response,
+                user_progress: progress
+            };
+        } catch (error) {
+            console.error('[Lessons] Ошибка получения урока:', error);
+            throw error;
+        }
     },
 
     // Получение списка всех уроков
-    async getLessons() {
-        // Имитация задержки сети
-        await new Promise(resolve => setTimeout(resolve, 500));
-        return Object.values(lessons);
+    async getLessons(filters = {}) {
+        try {
+            console.log('[Lessons] Получение списка уроков');
+
+            const response = await ApiService.get('/lessons', filters);
+            return response;
+        } catch (error) {
+            console.error('[Lessons] Ошибка получения списка уроков:', error);
+            throw error;
+        }
     },
 
-    // Отправка ответа на тест
-    async submitQuizAnswer(lessonId, stepIndex, answerIndex) {
-        // Имитация задержки сети
-        await new Promise(resolve => setTimeout(resolve, 500));
-        // Проверяем, существует ли урок и шаг
-        if (!lessons[lessonId] || !lessons[lessonId].steps[stepIndex]) {
-            throw new Error('Урок или шаг не найден');
+    // Начало прохождения урока
+    async startLesson(lessonId) {
+        try {
+            console.log(`[Lessons] Начало урока ${lessonId}`);
+
+            const response = await ApiService.post(`/lessons/${lessonId}/start`);
+
+            // Создаем локальную запись о прогрессе для отслеживания
+            const progressData = {
+                lesson_id: lessonId,
+                status: 'in_progress',
+                progress_percentage: 0,
+                time_spent_minutes: 0,
+                started_at: new Date().toISOString()
+            };
+
+            localStorage.setItem(`lesson_progress_${lessonId}`, JSON.stringify(progressData));
+
+            return response;
+        } catch (error) {
+            console.error('[Lessons] Ошибка начала урока:', error);
+            throw error;
         }
-        return {
-            success: true,
-            lessonId,
-            stepIndex,
-            answerIndex
+    },
+
+    // Обновление прогресса урока
+    async updateLessonProgress(lessonId, progressData) {
+        try {
+            console.log(`[Lessons] Обновление прогресса урока ${lessonId}:`, progressData);
+
+            const response = await ApiService.put(`/lessons/${lessonId}/progress`, progressData);
+
+            // Обновляем локальный прогресс
+            const currentProgress = this.getLessonProgressLocal(lessonId);
+            const updatedProgress = {
+                ...currentProgress,
+                ...progressData,
+                updated_at: new Date().toISOString()
+            };
+
+            localStorage.setItem(`lesson_progress_${lessonId}`, JSON.stringify(updatedProgress));
+
+            // Если урок завершен, начисляем коины
+            if (progressData.status === 'completed' && currentProgress.status !== 'completed') {
+                try {
+                    await GamificationService.addCoins(25, `Завершение урока`);
+                } catch (gamificationError) {
+                    console.warn('[Lessons] Не удалось начислить коины:', gamificationError);
+                }
+
+                // Обновляем прогресс персонального плана
+                try {
+                    await AIService.updatePlanProgress(currentProgress.current_step + 1);
+                } catch (aiError) {
+                    console.warn('[Lessons] Не удалось обновить AI план:', aiError);
+                }
+            }
+
+            return response;
+        } catch (error) {
+            console.error('[Lessons] Ошибка обновления прогресса:', error);
+            throw error;
+        }
+    },
+
+    // Получение прогресса урока
+    async getLessonProgress(lessonId) {
+        try {
+            console.log(`[Lessons] Получение прогресса урока ${lessonId}`);
+
+            const response = await ApiService.get(`/lessons/${lessonId}/progress`);
+            return response;
+        } catch (error) {
+            console.error('[Lessons] Ошибка получения прогресса:', error);
+            // Возвращаем локальный прогресс в случае ошибки
+            return this.getLessonProgressLocal(lessonId);
+        }
+    },
+
+    // Получение локального прогресса
+    getLessonProgressLocal(lessonId) {
+        const saved = localStorage.getItem(`lesson_progress_${lessonId}`);
+        return saved ? JSON.parse(saved) : {
+            lesson_id: lessonId,
+            status: 'not_started',
+            progress_percentage: 0,
+            time_spent_minutes: 0,
+            started_at: null,
+            completed_at: null
         };
+    },
+
+    // Получение тестов урока
+    async getLessonQuizzes(lessonId) {
+        try {
+            console.log(`[Lessons] Получение тестов урока ${lessonId}`);
+
+            const response = await ApiService.get(`/lessons/${lessonId}/quiz`);
+            return response;
+        } catch (error) {
+            console.error('[Lessons] Ошибка получения тестов:', error);
+            throw error;
+        }
+    },
+
+    // Отправка ответа на тест с AI валидацией
+    async submitQuizAnswer(quizId, answerData) {
+        try {
+            console.log(`[Lessons] Отправка ответа на тест ${quizId}:`, answerData);
+
+            const response = await ApiService.post(`/lessons/quiz/${quizId}/answer`, {
+                user_answer: answerData.userAnswer,
+                answer_index: answerData.answerIndex
+            });
+
+            // Используем AI для дополнительной валидации ответа
+            try {
+                const aiValidation = await AIService.validateQuizAnswer(quizId, answerData.userAnswer);
+                response.ai_validation = aiValidation;
+            } catch (aiError) {
+                console.warn('[Lessons] AI валидация недоступна:', aiError);
+            }
+
+            // Начисляем коины за правильный ответ
+            if (response.is_correct) {
+                try {
+                    await GamificationService.addCoins(10, 'Правильный ответ на тест');
+                } catch (gamificationError) {
+                    console.warn('[Lessons] Не удалось начислить коины:', gamificationError);
+                }
+            }
+
+            return response;
+        } catch (error) {
+            console.error('[Lessons] Ошибка отправки ответа:', error);
+            throw error;
+        }
     },
 
     // Отметить урок как завершенный
     async completeLesson(lessonId) {
-        // Имитация задержки сети
-        await new Promise(resolve => setTimeout(resolve, 500));
-        // Проверяем, существует ли урок
-        if (!lessons[lessonId]) {
-            throw new Error('Урок не найден');
+        try {
+            console.log(`[Lessons] Завершение урока ${lessonId}`);
+
+            const response = await ApiService.post(`/lessons/${lessonId}/complete`);
+
+            // Обновляем локальный прогресс
+            await this.updateLessonProgress(lessonId, {
+                status: 'completed',
+                progress_percentage: 100,
+                completed_at: new Date().toISOString()
+            });
+
+            return response;
+        } catch (error) {
+            console.error('[Lessons] Ошибка завершения урока:', error);
+            throw error;
         }
-        return {
-            success: true,
-            lessonId
-        };
+    },
+
+    // Получение статистики обучения пользователя
+    async getLearningStats() {
+        try {
+            console.log('[Lessons] Получение статистики обучения');
+
+            const response = await ApiService.get('/users/learning-stats');
+            return response;
+        } catch (error) {
+            console.error('[Lessons] Ошибка получения статистики:', error);
+            throw error;
+        }
+    },
+
+    // Получение рекомендуемых уроков
+    async getRecommendedLessons(limit = 3) {
+        try {
+            console.log('[Lessons] Получение рекомендуемых уроков');
+
+            const response = await ApiService.get('/lessons/recommended', { limit });
+
+            // Дополняем AI рекомендациями если доступно
+            try {
+                const aiRecommendations = await AIService.getRecommendations(limit);
+                const lessonRecommendations = aiRecommendations
+                    .filter(rec => rec.content_type === 'lesson')
+                    .map(rec => ({
+                        ...rec,
+                        recommendation_reason: rec.reason,
+                        confidence: rec.confidence
+                    }));
+
+                // Объединяем рекомендации с backend и AI
+                response.ai_recommendations = lessonRecommendations;
+            } catch (aiError) {
+                console.warn('[Lessons] AI рекомендации недоступны:', aiError);
+            }
+
+            return response;
+        } catch (error) {
+            console.error('[Lessons] Ошибка получения рекомендаций:', error);
+            throw error;
+        }
+    },
+
+    // Поиск уроков
+    async searchLessons(query, filters = {}) {
+        try {
+            console.log('[Lessons] Поиск уроков:', query);
+
+            const response = await ApiService.get('/lessons/search', {
+                query: query,
+                ...filters
+            });
+
+            return response;
+        } catch (error) {
+            console.error('[Lessons] Ошибка поиска уроков:', error);
+            throw error;
+        }
+    },
+
+    // Получение категорий уроков
+    async getLessonCategories() {
+        try {
+            console.log('[Lessons] Получение категорий уроков');
+
+            const response = await ApiService.get('/lessons/categories');
+            return response;
+        } catch (error) {
+            console.error('[Lessons] Ошибка получения категорий:', error);
+            throw error;
+        }
+    },
+
+    // Генерация адаптивного контента урока с помощью AI
+    async generateAdaptiveContent(lessonId, contentType = 'explanation') {
+        try {
+            console.log(`[Lessons] Генерация адаптивного контента для урока ${lessonId}`);
+
+            const aiContent = await AIService.generateLessonContent(lessonId, contentType);
+
+            return {
+                success: true,
+                content: aiContent
+            };
+        } catch (error) {
+            console.error('[Lessons] Ошибка генерации контента:', error);
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    },
+
+    // Получение шагов урока
+    async getLessonSteps(lessonId) {
+        try {
+            console.log(`[Lessons] Получение шагов урока ${lessonId}`);
+
+            const response = await ApiService.get(`/lessons/${lessonId}/steps`);
+            return response;
+        } catch (error) {
+            console.error('[Lessons] Ошибка получения шагов урока:', error);
+            throw error;
+        }
+    },
+
+    // Отметить шаг урока как завершенный
+    async completeStep(lessonId, stepId) {
+        try {
+            console.log(`[Lessons] Завершение шага ${stepId} урока ${lessonId}`);
+
+            const response = await ApiService.post(`/lessons/${lessonId}/steps/${stepId}/complete`);
+            return response;
+        } catch (error) {
+            console.error('[Lessons] Ошибка завершения шага:', error);
+            throw error;
+        }
+    },
+
+    // Получение материалов урока
+    async getLessonMaterials(lessonId) {
+        try {
+            console.log(`[Lessons] Получение материалов урока ${lessonId}`);
+
+            const response = await ApiService.get(`/lessons/${lessonId}/materials`);
+            return response;
+        } catch (error) {
+            console.error('[Lessons] Ошибка получения материалов:', error);
+            throw error;
+        }
+    },
+
+    // Оценка урока
+    async rateLesson(lessonId, rating, comment = '') {
+        try {
+            console.log(`[Lessons] Оценка урока ${lessonId}: ${rating}`);
+
+            const response = await ApiService.post(`/lessons/${lessonId}/rate`, {
+                rating: rating,
+                comment: comment
+            });
+
+            return response;
+        } catch (error) {
+            console.error('[Lessons] Ошибка оценки урока:', error);
+            throw error;
+        }
     }
 }; 

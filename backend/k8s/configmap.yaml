@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: financial-literacy-config
+  namespace: financial-literacy
+data:
+  DATABASE_URL: "postgresql://user:password@postgres-service:5432/financial_literacy"
+  REDIS_URL: "redis://redis-service:6379"
+  KAFKA_BOOTSTRAP_SERVERS: "kafka-service:9092"
+  KAFKA_TOPIC_USER_EVENTS: "user-events"
+  KAFKA_TOPIC_LESSON_EVENTS: "lesson-events"
+  KAFKA_TOPIC_GAMIFICATION: "gamification-events"
+  KUBERNETES_NAMESPACE: "financial-literacy"
+  API_V1_STR: "/api/v1"
+  PROJECT_NAME: "Financial Literacy App"
+  ALGORITHM: "HS256"
+  ACCESS_TOKEN_EXPIRE_MINUTES: "30"
+  REFRESH_TOKEN_EXPIRE_DAYS: "7"
+  OPENAI_MODEL: "gpt-4"
+  COINS_PER_LESSON: "10"
+  COINS_PER_CHALLENGE: "50"
+  DAILY_LOGIN_BONUS: "5"
+  DEBUG: "false" 

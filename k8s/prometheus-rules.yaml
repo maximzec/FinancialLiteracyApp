@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-rules
+  namespace: financial-literacy
+data:
+  alerts.yml: |
+    groups:
+      - name: financial_literacy_alerts
+        rules:
+          # High error rate
+          - alert: HighErrorRate
+            expr: rate(http_requests_total{status_code=~"5.."}[5m]) > 0.1
+            for: 5m
+            labels:
+              severity: critical
+            annotations:
+              summary: "High error rate detected"
+              description: "Error rate is {{ $value }} errors per second"
+
+          # High response time
+          - alert: HighResponseTime
+            expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 1
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "High response time detected"
+              description: "95th percentile response time is {{ $value }} seconds"
+
+          # High CPU usage
+          - alert: HighCPUUsage
+            expr: cpu_usage_percent > 80
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "High CPU usage"
+              description: "CPU usage is {{ $value }}%"
+
+          # High memory usage
+          - alert: HighMemoryUsage
+            expr: (memory_usage_bytes / (1024*1024*1024)) > 2
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "High memory usage"
+              description: "Memory usage is {{ $value }}GB"
+
+          # Service down
+          - alert: ServiceDown
+            expr: up == 0
+            for: 1m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Service is down"
+              description: "{{ $labels.job }} service is down"
+
+          # Database connection issues
+          - alert: DatabaseConnectionIssues
+            expr: database_connections_active > 50
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "High number of database connections"
+              description: "{{ $value }} active database connections"
+
+          # AI request failures
+          - alert: AIRequestFailures
+            expr: rate(ai_requests_total[5m]) == 0 and rate(http_requests_total{endpoint=~"/api/v1/ai.*"}[5m]) > 0
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "AI requests are failing"
+              description: "AI requests are not being processed successfully" 

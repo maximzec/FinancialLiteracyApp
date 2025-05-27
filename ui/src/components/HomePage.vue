@@ -34,6 +34,48 @@
           </div>
         </div>
 
+        <!-- Еженедельные челленджи (НОВОЕ) -->
+        <div class="mb-6 p-5 border border-neutral-200 rounded-xl shadow-sm bg-white">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-base font-medium text-neutral-900">Еженедельные челленджи</h3>
+            <span class="text-xs text-neutral-500">На этой неделе</span>
+          </div>
+          
+          <div v-for="challenge in challenges" :key="challenge.id" class="mb-4 last:mb-0">
+            <div class="flex justify-between items-start mb-2">
+              <div class="flex items-center">
+                <div class="w-8 h-8 rounded-lg bg-alpha-50 flex items-center justify-center mr-3">
+                  <span class="text-alpha-500 text-sm font-medium">{{ challenge.reward }}</span>
+                </div>
+                <div>
+                  <h4 class="text-sm font-medium text-neutral-900">{{ challenge.title }}</h4>
+                  <p class="text-xs text-neutral-500">{{ challenge.description }}</p>
+                </div>
+              </div>
+              <span class="px-2 py-1 rounded-full text-xs font-medium"
+                :class="{
+                  'bg-green-50 text-green-700': challenge.status === 'completed',
+                  'bg-alpha-50 text-alpha-500': challenge.status === 'in_progress',
+                  'bg-neutral-50 text-neutral-500': challenge.status === 'locked'
+                }">
+                {{ getChallengeStatus(challenge.status) }}
+              </span>
+            </div>
+            
+            <div v-if="challenge.status === 'in_progress'" class="pl-11">
+              <div class="flex justify-between text-xs text-neutral-500 mb-1">
+                <span>Прогресс</span>
+                <span>{{ challenge.progress }}%</span>
+              </div>
+              <div class="bg-neutral-100 rounded-full h-1.5">
+                <div class="bg-alpha-500 rounded-full h-1.5"
+                    :style="{ width: `${challenge.progress}%` }">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div 
           class="p-5 border border-neutral-200 rounded-xl shadow-sm hover:border-alpha-300 transition-colors cursor-pointer bg-white"
           tabindex="0"
@@ -113,6 +155,48 @@
         </div>
       </div>
 
+      <!-- Рейтинг пользователей (НОВОЕ) -->
+      <div class="mb-6 p-5 border border-neutral-200 rounded-xl shadow-sm bg-white">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-base font-medium text-neutral-900">Рейтинг участников</h3>
+          <span class="text-xs text-neutral-500">Топ-10</span>
+        </div>
+        
+        <!-- Топ-3 пользователей -->
+        <div class="flex justify-center items-end space-x-6 mb-6">
+          <div v-for="(user, index) in topThreeUsers" :key="user.id" 
+               class="flex flex-col items-center"
+               :class="{'order-2': index === 0, 'order-1': index === 1, 'order-3': index === 2}">
+            <div class="relative">
+              <div class="w-12 h-12 rounded-full flex items-center justify-center mb-2"
+                   :class="{
+                     'bg-gradient-to-br from-red-400 to-red-500': index === 0,
+                     'bg-gradient-to-br from-gray-300 to-gray-400': index === 1,
+                     'bg-gradient-to-br from-amber-400 to-amber-500': index === 2
+                   }">
+                <span class="text-lg font-bold text-white">{{ index + 1 }}</span>
+              </div>
+              <div class="absolute -top-1 -right-1 bg-alpha-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                {{ user.points }}
+              </div>
+            </div>
+            <span class="text-xs font-medium text-neutral-700">{{ user.name }}</span>
+          </div>
+        </div>
+
+        <!-- Список остальных пользователей -->
+        <div class="space-y-2">
+          <div v-for="(user, index) in otherUsers" :key="user.id"
+               class="flex items-center justify-between p-2 rounded-lg hover:bg-neutral-50">
+            <div class="flex items-center space-x-3">
+              <span class="text-sm text-neutral-400 w-5">{{ index + 4 }}</span>
+              <span class="text-sm font-medium text-neutral-700">{{ user.name }}</span>
+            </div>
+            <span class="text-sm text-alpha-500 font-medium">{{ user.points }}</span>
+          </div>
+        </div>
+      </div>
+
       <!-- Совет дня -->
       <div class="p-5 border border-neutral-100 rounded-xl bg-neutral-50 mb-6">
         <div class="flex items-center mb-2">
@@ -164,6 +248,57 @@ const currentLesson = ref({
   description: "Научитесь правильно планировать свои доходы и расходы",
   progress: 25
 });
+
+// Данные для челленджей (НОВОЕ)
+const challenges = ref([
+  {
+    id: 1,
+    title: 'Финансовый план на неделю',
+    description: 'Создайте и придерживайтесь финансового плана в течение недели',
+    reward: '500',
+    status: 'in_progress',
+    progress: 60
+  },
+  {
+    id: 2,
+    title: 'Инвестиционный портфель',
+    description: 'Изучите основы инвестирования и создайте свой первый портфель',
+    reward: '1000',
+    status: 'locked'
+  },
+  {
+    id: 3,
+    title: 'Экономия на покупках',
+    description: 'Найдите способы сэкономить на ежедневных покупках',
+    reward: '300',
+    status: 'completed'
+  }
+]);
+
+// Данные для рейтинга пользователей (НОВОЕ)
+const users = ref([
+  { id: 1, name: 'Алексей', points: 1200 },
+  { id: 2, name: 'Мария', points: 1150 },
+  { id: 3, name: 'Иван', points: 1000 },
+  { id: 4, name: 'Елена', points: 950 },
+  { id: 5, name: 'Дмитрий', points: 900 },
+  { id: 6, name: 'Анна', points: 850 },
+  { id: 7, name: 'Сергей', points: 800 },
+]);
+
+// Вычисляемые свойства для топ-3 и остальных пользователей (НОВОЕ)
+const topThreeUsers = computed(() => users.value.slice(0, 3));
+const otherUsers = computed(() => users.value.slice(3));
+
+// Функция для получения статуса челленджа в человекочитаемом виде (НОВОЕ)
+const getChallengeStatus = (status) => {
+  const statusMap = {
+    completed: 'Выполнено',
+    in_progress: 'В процессе',
+    locked: 'Заблокировано'
+  };
+  return statusMap[status];
+};
 
 const facts = ref([
   "70% людей, ведущих бюджет, достигают финансовых целей быстрее",
